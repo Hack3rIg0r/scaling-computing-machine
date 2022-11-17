@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<!-- This is based on DillingerLee's great template here:
+https://github.com/Team-Code/KA_Offline -->
+<html> 
+ <head>
+    <title>Processing.JS inside Webpages: Template</title> 
+</head>
+ <body>
+    <p align="center"> 
+	<!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas> 
+    </p>
+ </body>
+ 
+ <!-- Run all the JavaScript stuff -->
+ <!-- Include the processing.js library -->
+ <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+ <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script> 
+ 
+ <script>
+    var sketchProc = function(processingInstance) {
+     with (processingInstance) {
+        size(500, 500); 
+        frameRate(30);
+        
+        // Variables
+            var t = 0;
+         var a = 0;
+         var b = 0;
+         var m =0;
+         var Round = 0;
+         var Time = 0;
+         var Score = 0;
+         var c = 1;
+         var High = [];
+	 var WeoponType = 0;
+         var Equiped=0;
+         var dead=[];
+         var Delay = 0;
+	 var TimeMovment=0
+         var RoundTime=0
+         var e = 0
+         var Types=0
+         var s = 0
+         var faze =0
+         var RoundType=0
+         var speed = 1
+         var keep = 0
+         var Help = 0
+         var TeleTime = 0
+         var TeleDone = 1
+         var TimeStop = 0
+         var Ability = 0
+         var AbilityTime= 0
+         var g = 0
+         var Multi = 1
+
+
+
+	//Character Bilder
+         var main = function(x,y,v,Vx,Vy,HP,Hit,Type,Recoil,next){
+    this.x=x;
+    this.y=y;
+    this.v=v;
+    this.Vx=Vx;
+    this.Vy=Vy;
+    this.HP=HP;
+    this.Hit=Hit;
+    this.Type=Type;
+    this.Recoil=Recoil;
+    this.next=next;
+}; 
+//shield
+var shield = function(x,y,Width,Height){
+fill(0,0,0)
+rect(x,y,Width,Height)
+}
+
+	//Button Bilder
+var Button = function(x,y,Width,Height,text){
+this.x=x;
+this.y=y;
+this.Height=Height;
+this.Width=Width;
+this.text=text;
+};
+
+
+	//Drawing Button
+Button.prototype.draw=function(){
+fill(0, 251, 255);
+rect(this.x,this.y,this.Width,this.Height);
+fill(0,0,0);
+textSize(30);
+text(this.text,this.x+this.Width/8,this.y+this.Height/2);
+};
+
+
+	//My Buttons
+var StartBTN = new Button(170,300,150,50,"Play");
+var StartBTN1 = new Button(100,300,300,50,"Play Again");
+var pierceBTN = new Button(50,250,150,200,"pierce");
+var scatherBTN = new Button(310,250,150,200,"scather");
+var BombBTN = new Button(200,250,110,200,"Bomb");
+var TeleBTN = new Button(50,250,150,200,"Freeze");
+var PoundBTN = new Button(310,250,150,200,"Ground Pound")
+var TripleBTN = new Button(200,250,110,200,"3x")
+
+
+	//Drawing Players Character     
+main.prototype.draw= function() {
+    fill(255, 0, 0);
+    ellipse(this.x,this.y,10,10);
+    if(RoundType===1){
+    this.y = constrain(this.y, 125,375);
+    this.x = constrain(this.x,125,375);
+    }
+    this.y = constrain(this.y, 0, 500);
+    this.x = constrain(this.x,0,500);
+};
+
+
+	//Drawing Enemies
+main.prototype.draw1=function(){
+    if(this.Type===1){
+    fill(0,0,255);
+    }
+    if(this.HP===3){
+    fill(0,255,0);
+    }
+    if(this.HP===2){
+    fill(255, 221, 0);
+    }
+    if(this.HP===1){
+    fill(255,0,0);
+    }
+    if(this.Type===1){
+    fill(0,0,255);
+    }
+    if (this.Type!=6){
+    rect(this.x,this.y,10,10);
+    }
+    if (this.Type===6){
+    fill(0,250-5*(50-this.HP),0);
+    rect(this.x,this.y,40,40);
+    }
+};
+
+
+	//Movment Keys
+main.prototype.move1= function(){
+     if (keyCode === 38){
+      this.y=this.y-this.v*speed;
+     }
+     if (keyCode === 40){
+      this.y=this.y+this.v*speed;
+     }
+     if (keyCode === 39){
+      this.x=this.x+this.v*speed;
+     }
+     if (keyCode === 37){
+      this.x=this.x-this.v*speed;
+     }
+     if (keyCode === 87){
+     if (keyCode === 87){
+     if(millis()-t>600)
+     if(Equiped===WeoponType){
+     Equiped=0;
+     }
+     else{
+     Equiped=WeoponType;
+     keyCode=0;
+     }
+     }
+     }
+     if(keyCode === 69){
+     if(Ability===1){
+     if(TeleTime+10000 <millis()){
+     TimeStop = millis()
+     TeleDone=0;
+     AbilityTime= millis()
+     g=1
+     }
+     }
+     if(Ability===2){
+     if(TeleTime+15000 <millis()){
+     TeleTime = millis()
+     fill(0,252,0);
+     ellipse(Hero.x,Hero.y,100,100);
+     for(var m=0; m < Enemys.length; m++){
+   if(Enemys[m].Type<6){
+   if ((Enemys[m].x-Hero.x)*(Enemys[m].x-Hero.x)+(Enemys[m].y-Hero.y)*(Enemys[m].y-Hero.y)<10000){
+   Score=Score+Enemys[m].HP
+   Enemys.splice(m,1);
+   m=m-1
+   }
+   }
+   else if(Enemys[m].Type===6){
+   if ((Enemys[m].x-Hero.x)*(Enemys[m].x-Hero.x)+(Enemys[m].y-Hero.y)*(Enemys[m].y-Hero.y)<12100){
+   Enemys[m].HP=Enemys[m].HP-20
+   }
+   }
+   };
+     }
+     }
+     if(Ability===3){
+     Multi=3
+     g=1
+     AbilityTime= millis()
+     }
+     }
+      if (Time>600){
+    keyCode=0;
+    }
+}; 
+
+
+
+	//Enemy Movement
+main.prototype.move = function(){
+     this.x=this.x+this.Vx*this.v*speed*TeleDone;
+     this.y=this.y+this.Vy*this.v*speed*TeleDone;
+if(this.Type===1){
+ this.y = constrain(this.y, 0, 490);
+ this.x = constrain(this.x,0,490);
+}
+};
+
+
+	//Stop Function
+main.prototype.stop=function(){
+this.x=this.x;
+this.y=this.y;
+};
+
+
+	//Creating the Characters
+var Hero = new main(250,250,10,0,0,0,0,0,0)
+var Enemys=[];
+
+
+	//Tracking Function
+main.prototype.track=function(){
+  this.Vx=(Hero.x-this.x)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
+  this.Vy=(Hero.y-this.y)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
+  if(this.Type===1){
+   this.Vx=-1*(Hero.x-this.x)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
+  this.Vy=-1*(Hero.y-this.y)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
+}
+};
+
+
+	//Projectals
+main.prototype.fire= function(){
+     fill(100,100,100);
+     ellipse(this.x,this.y,5,5);
+};  
+main.prototype.fire1= function(){
+     fill(0,0,0);
+     ellipse(this.x,this.y,15,15);
+};  
+main.prototype.fire2= function(){
+     fill(0,0,0);
+     ellipse(this.x,this.y,2,2);
+};  
+main.prototype.fire3= function(){
+     fill(255,0,0);
+     ellipse(this.x,this.y,7,7);
+};  
+ var Bullets =[];
+ var EnBullets =[];
+ var Bombs =[];
+ var Pierce =[];
+
+
+
+
+
+//loading screen
+ var Start = function(){
+ var y = 0;
+ draw=function(){
+ background(252,252,252);
+ StartBTN.draw();
+ textSize(50);
+ text("Circles vs Squares",70,150);
+ fill(0,255, 0);
+ rect(20,250+cos(y/50)*50,125,125);
+ fill(255, 0, 0);
+ ellipse(430,335+sin(y/50)*50,130,130);
+ y=y+1;
+ mousePressed = function(){
+ if (c ===1){
+ if (StartBTN.x<mouseX){
+ if (StartBTN.x+StartBTN.Width>mouseX){
+ if (StartBTN.y<mouseY){
+ if (StartBTN.y+StartBTN.Height>mouseY){
+     ChooseWeopon();
+ }
+ }
+ }
+ }
+ }
+ }
+ };
+ };
+
+
+
+
+//Choose weopon screen
+var ChooseWeopon = function(){
+c=2
+draw=function(){
+ background(252,252,252);
+BombBTN.draw();
+pierceBTN.draw();
+scatherBTN.draw();
+mousePressed = function(){
+ if (c ===2){
+ if (BombBTN.x<mouseX){
+ if (BombBTN.x+BombBTN.Width>mouseX){
+ if (BombBTN.y<mouseY){
+ if (BombBTN.y+BombBTN.Height>mouseY){
+       WeoponType=1; 
+ 	ChooseAbility();
+   
+ }
+ }
+ }
+ }
+ if (pierceBTN.x<mouseX){
+ if (pierceBTN.x+pierceBTN.Width>mouseX){
+ if (pierceBTN.y<mouseY){
+ if (pierceBTN.y+pierceBTN.Height>mouseY){
+       WeoponType=2; 
+ 	ChooseAbility();
+   
+ }
+ }
+ }
+ }
+ if (scatherBTN.x<mouseX){
+ if (scatherBTN.x+scatherBTN.Width>mouseX){
+ if (scatherBTN.y<mouseY){
+ if (scatherBTN.y+scatherBTN.Height>mouseY){
+       WeoponType=3; 
+ 	ChooseAbility();
+   
+ }
+ }
+ }
+ }
+ }
+};
+};
+};
+
+
+
+
+var ChooseAbility = function(){
+c=2
+draw=function(){
+ background(252,252,252);
+TeleBTN.draw();
+PoundBTN.draw();
+TripleBTN.draw();
+mousePressed = function(){
+ if (c ===2){
+ if (TeleBTN.x<mouseX){
+ if (TeleBTN.x+TeleBTN.Width>mouseX){
+ if (TeleBTN.y<mouseY){
+ if (TeleBTN.y+TeleBTN.Height>mouseY){
+       Ability=1; 
+ 	Game();
+   
+ }
+ }
+ }
+ }
+ if (PoundBTN.x<mouseX){
+ if (PoundBTN.x+PoundBTN.Width>mouseX){
+ if (PoundBTN.y<mouseY){
+ if (PoundBTN.y+PoundBTN.Height>mouseY){
+       Ability=2; 
+ 	Game();
+ }
+ }
+ }
+ }
+  if (TripleBTN.x<mouseX){
+ if (TripleBTN.x+TripleBTN.Width>mouseX){
+ if (TripleBTN.y<mouseY){
+ if (TripleBTN.y+TripleBTN.Height>mouseY){
+       Ability=3; 
+ 	Game();
+ }
+ }
+ }
+ }
+ }
+};
+};
+};
+
+
+
+
+	//Game Over Screen
+ var GameOver = function(){
+ High.push(Score);
+ for(var i=0;i<Enemys.length; i++){
+ Enemys.splice(i,1);
+ };
+  draw=function(){
+ background(252,252,252);
+ StartBTN1.draw();
+ textSize(50);
+ text("Game Over",130,150);
+ textSize(30)
+ text("Final Score:"+Score,170,230);
+  text("Highscore:"+max(High),170,270);
+ mousePressed = function(){
+ if (StartBTN1.x<mouseX){
+ if (StartBTN1.x+StartBTN1.Width>mouseX){
+ if (StartBTN1.y<mouseY){
+ if (StartBTN1.y+StartBTN1.Height>mouseY){
+     c = 0;
+     Game();
+ }
+ }
+ }
+ }
+ };
+ };
+ };
+
+
+
+
+
+
+	//Main Game
+ var Game = function(){
+ RoundType=0
+ TeleTime=millis()
+   faze=1
+   Hero.x =250;
+   kill=0
+   speed=1
+   Hero.y=250;
+   Score = 0;
+   Round = millis();
+   RoundTime=millis();
+draw = function(){ 
+   if(Ability===1){
+   if(AbilityTime+5000<millis()){
+   TeleDone=1
+   if (g===1){
+   TeleTime=millis()
+   RoundTime=millis()+RoundTime-TimeStop
+   for (var i = 0; i < Enemys.length; i++) {
+   Enemys[i].Recoil=Enemys[i].Recoil+millis()-TimeStop
+   g=0
+   };
+   }
+   }
+   }
+   if(Ability===3){
+   if(AbilityTime+10000<millis()){
+   Multi=1
+   if (g===1){
+   TeleTime=millis()
+   g=0
+   }
+   }
+   }
+   keyPressed=function(){
+   t = millis();
+   };
+   keyReleased=function(){
+   t = 250;
+   };
+   Time = millis()-t;
+   c = 0;
+   a =0;
+    if(RoundType!=1){
+    background(252, 252, 252);
+    }
+    if(RoundType===1){
+    background(0, 252, 0);
+    
+    rect(125,125,250,250);
+    }
+    fill(252,0,0);
+    if (Ability===1){
+    if(10000-(millis()-TeleTime)>0){
+    fill(252,0,0);
+    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/10000);
+    }
+    else{
+     fill(0,0,252);
+     if(AbilityTime+5000>millis()){
+     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(1-(millis()-AbilityTime)/5000)));
+    }
+    else{
+    ellipse(250,450,50,50)
+    }
+    }
+    }
+    if (Ability===2){
+    if(15000-(millis()-TeleTime)>0){
+    fill(252,0,0);
+    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+Math.PI*2-(2*Math.PI*(millis()-TeleTime))/15000);
+    }
+    else{
+     fill(0,0,252);
+     ellipse(250,450,50,50)
+    }
+    }
+    if (Ability===3){
+    if(30000-(millis()-TeleTime)>0){
+    fill(252,0,0);
+    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/30000);
+    }
+    else{
+     fill(0,0,252);
+     if(AbilityTime+10000>millis()){
+     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(1-(millis()-AbilityTime)/10000)));
+    }
+    else{
+     fill(0,0,252);
+     ellipse(250,450,50,50)
+    }
+    }
+    }
+      Hero.draw();
+      Hero.move1();
+
+  for (var i = 0; i < Enemys.length; i++) {
+  Enemys[i].track();
+  Enemys[i].move();
+  Enemys[i].draw1();
+  if (Enemys[i].Type===2){
+  shield(Enemys[i].x-5, Enemys[i].y,5,10)
+  }
+  if (Enemys[i].Type===3){
+  shield(Enemys[i].x+10, Enemys[i].y,5,10)
+  }
+  if (Enemys[i].Type===4){
+  shield(Enemys[i].x, Enemys[i].y+10,10,5)
+  }
+  if (Enemys[i].Type===5){
+  shield(Enemys[i].x, Enemys[i].y-5,10,5)
+  }
+  if (Enemys[i].Type===1||Enemys[i].Type===6){
+  if (TeleDone===1){
+  if(Enemys[i].Recoil<millis()-Enemys[i].next){
+   Enemys[i].Recoil=millis()
+   Enemys[i].next=random(2000,4000);
+   EnBullets.push(new main(Enemys[i].x,Enemys[i].y,10,(Hero.x-Enemys[i].x)/(sqrt((Enemys[i].x-Hero.x)*(Enemys[i].x-Hero.x)+(Enemys[i].y-Hero.y)*(Enemys[i].y-Hero.y))),(Hero.y-Enemys[i].y)/(sqrt((Enemys[i].x-Hero.x)*(Enemys[i].x-Hero.x)+(Enemys[i].y-Hero.y)*(Enemys[i].y-Hero.y))),0,0,0,0));
+  }
+  }
+  }
+  if(Enemys[i].Type<6)
+  if (Enemys[i].x-5<Hero.x){
+  if (Enemys[i].x+5>Hero.x){
+  if (Enemys[i].y-5<Hero.y){
+  if (Enemys[i].y+5>Hero.y){
+  Enemys.splice(0,Enemys.length);
+        c=1;
+        GameOver();
+        var kill= 1
+   }
+   }
+   }
+   }
+   } 
+  if(kill===0){
+  if (Enemys[i].Type===6){
+  if (Enemys[i].x-5<Hero.x){
+  if (Enemys[i].x+35>Hero.x){
+  if (Enemys[i].y-5<Hero.y){
+  if (Enemys[i].y+35>Hero.y){
+        Enemys.splice(0,Enemys.length);
+        c=1;
+        GameOver();
+   }
+   }
+   }
+   }
+   }
+   };
+   mousePressed = function(){
+   e=0
+   };
+   if (e===0 && c===0){
+   if (Equiped===0){
+   if (millis()-Delay>100){
+       Bullets.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+   Delay=millis();
+   }
+   }
+   if (Equiped===1){
+   if (millis()-Delay>1000){
+       Bombs.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+   Delay=millis();
+   }
+   }
+   if (Equiped===2){
+       if (millis()-Delay>250){
+       Pierce.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+       Delay=millis();
+   }
+   }
+   if (Equiped===3){
+   if (millis()-Delay>1000){
+   for (var i=0; i < 20; i++){
+   var alfa=Math.atan((mouseY-Hero.y)/(mouseX-Hero.x))+random(-0.52359877559,0.52359877559)
+    if(alfa>-1.57079632679 && mouseX-Hero.x>0){
+       Bullets.push(new main(Hero.x,Hero.y,10,Math.cos(alfa),-Math.sin(-alfa)));
+   }
+   else if(alfa<1.57079632679 && mouseX-Hero.x>0){
+       Bullets.push(new main(Hero.x,Hero.y,10,Math.cos(alfa),-Math.sin(-alfa),0,0,0,0));
+   }
+   else{
+    Bullets.push(new main(Hero.x,Hero.y,10,-Math.cos(alfa),Math.sin(-alfa)));
+   }
+   };
+   Delay=millis();
+   }
+   }
+   }
+mouseReleased = function(){
+   e=1
+   };
+
+for (var i=0; i < Bombs.length; i++){
+    if(TeleDone===0){
+   TeleDone=1
+   Bombs[i].move();
+   TeleDone=0
+   }
+   else{
+   Bombs[i].move();
+   }
+   Bombs[i].fire1();
+   var d = 0;
+   if (d===0){
+   if (Bombs[i].x>500){
+   Bombs.splice(i,1);
+   d = 1;
+   }
+   }
+   if (d===0){
+   if (Bombs[i].x<0){
+   Bombs.splice(i,1);
+   d = 1;
+   }
+   }
+   if (d===0){
+   if (Bombs[i].y>500){
+   Bombs.splice(i,1);
+   d = 1;
+   }
+   }
+   if (d===0){
+   if (Bombs[i].y<0){
+   Bombs.splice(i,1);
+   d = 1;
+   }
+   }
+   if (d===0){
+    for (var j=0; j< Enemys.length; j++){
+   if  (Enemys[j].Type<6){
+   if (Enemys[j].x-12.5<Bombs[i].x){
+   if (Enemys[j].x+12.5>Bombs[i].x){
+   if (Enemys[j].y-12.5<Bombs[i].y){
+   if (Enemys[j].y+12.5>Bombs[i].y){
+        var DETx= Bombs[i].x
+        var DETy= Bombs[i].y
+        Bombs.splice(i,1);
+        d=1
+   for(var m=0; m < Enemys.length; m++){
+   if ((Enemys[m].x-DETx)*(Enemys[m].x-DETx)+(Enemys[m].y-DETy)*(Enemys[m].y-DETy)<2500){
+   Enemys[m].HP=Enemys[m].HP-1
+   Score=Score+Multi
+   if(Enemys[m].HP===0){
+   Enemys.splice(m,1);
+   m=m-1
+   }
+   }
+   };
+   j=Enemys.length;
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+    if (d===0){
+   for (var j=0; j< Enemys.length; j++){
+   if(Enemys[j].Type===6){
+   if (Enemys[j].x-2.5<Bombs[i].x){
+   if (Enemys[j].x+42.5>Bombs[i].x){
+   if (Enemys[j].y-2.5<Bombs[i].y){
+   if (Enemys[j].y+42.5>Bombs[i].y){
+        var DETx= Bombs[i].x
+        var DETy= Bombs[i].y
+        Bombs.splice(i,1);
+        Enemys[j].HP=Enemys[j].HP-10
+   for(var m=0; m < Enemys.length; m++){
+   if ((Enemys[m].x-DETx)*(Enemys[m].x-DETx)+(Enemys[m].y-DETy)*(Enemys[m].y-DETy)<2500){
+   Enemys[m].HP=Enemys[m].HP-1
+   if(Enemys[m].HP<0){
+   Enemys.splice(m,1);
+   Score=Score+20*Multi
+   m=m-1
+   }
+   }
+   };
+   j=Enemys.length;
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+   };
+
+
+
+
+   for (var i=0; i < EnBullets.length; i++){
+   EnBullets[i].fire3();
+   EnBullets[i].move();
+   if (Hero.x-2.5<EnBullets[i].x){
+   if (Hero.x+12.5>EnBullets[i].x){
+   if (Hero.y-2.5<EnBullets[i].y){
+   if (Hero.y+12.5>EnBullets[i].y){
+        EnBullets.splice(i,1);
+        GameOver();
+        c=1;
+   }
+   }
+   }
+   }
+   };
+for (var i=0; i < Bullets.length; i++){
+   Bullets[i].fire();
+   if(TeleDone===0){
+   TeleDone=1
+   Bullets[i].move();
+   TeleDone=0
+   }
+   else{
+   Bullets[i].move();
+   }
+   s=0
+   for (var j=0; j< Enemys.length; j++){
+   if (Enemys[j].Type===2 && s===0){
+   for (var x=0; x<10; x++){
+   if(s===0){
+   if (Enemys[j].x-7.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-12.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+2.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+    Bullets.splice(i,1);
+    i=i-1
+    s=1
+   }
+   }
+   }
+   }
+   else{
+   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+        i=i-1
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+   if (Enemys[j].Type===3){
+   for (var x=0; x<10; x++){
+   if(s===0){
+   if (Enemys[j].x+10<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+17.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-12.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+2.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+    Bullets.splice(i,1);
+    i=i-1
+    s=1
+   }
+   }
+   }
+   }
+   else{
+   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+        i=i-1
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+     if (Enemys[j].Type===4 && s===0){
+   for (var x=0; x<10; x++){
+   if(s===0){
+    if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+7.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+    Bullets.splice(i,1);
+    i=i-1
+    s=1
+   }
+   }
+   }
+   }
+   else{
+   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+        i=i-1
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+     if (Enemys[j].Type===5 && s===0){
+   for (var x=0; x<10; x++){
+   if(s===0){
+    if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-7.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y>Bullets[i].y-Bullets[i].Vy*(10-x)){
+    Bullets.splice(i,1);
+    i=i-1
+    s=1
+   }
+   }
+   }
+   }
+  else{
+   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
+   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
+   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+        i=i-1
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   }
+   if(s===0){
+   if(Enemys[j].Type<6){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   if(s===0){
+   if (Enemys[j].Type===6){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+42.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+42.5>Bullets[i].y){
+        s=1
+        Enemys[j].HP=Enemys[j].HP-1
+        Bullets.splice(i,1);
+   if(Enemys[j].HP===0){
+    Enemys.splice(j,1);
+    Score=Score+20*Multi
+   }
+   j=Enemys.length
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   };
+
+
+
+    for (var i=0; i < Pierce.length; i++){
+   Pierce[i].fire2();
+    if(TeleDone===0){
+   TeleDone=1
+   Pierce[i].move();
+   TeleDone=0
+   }
+   else{
+   Pierce[i].move();
+  }
+   for (var j=0; j< Enemys.length; j++){
+   s=0
+   if (Enemys[j].Type<6){
+   if (Enemys[j].x-2.5<Pierce[i].x){
+   if (Enemys[j].x+12.5>Pierce[i].x){
+   if (Enemys[j].y-2.5<Pierce[i].y){
+   if (Enemys[j].y+12.5>Pierce[i].y){
+        if(millis()-Enemys[j].Hit>400){
+        Enemys[j].Hit = millis();
+        Enemys[j].HP=Enemys[j].HP-1
+        Score = Score + Multi
+        s=1
+        }
+        if(Enemys[j].HP===0){
+        Enemys.splice(j,1);
+        j = j-1
+   }
+   }
+   }
+   }
+   }
+   }
+    if(s===0){
+   if (Enemys[j].Type===6){
+   if (Enemys[j].x-2.5<Pierce[i].x){
+   if (Enemys[j].x+42.5>Pierce[i].x){
+   if (Enemys[j].y-2.5<Pierce[i].y){
+   if (Enemys[j].y+42.5>Pierce[i].y){
+        if(millis()-Enemys[j].Hit>400){
+        Enemys[j].Hit = millis();
+        Enemys[j].HP=Enemys[j].HP-1
+        s=1
+        }
+        if(Enemys[j].HP===0){
+        Enemys.splice(j,1);
+        Score = Score + 20*Multi
+        j = j-1
+   }
+   }
+   }
+   }
+   }
+   }
+   }
+   };
+   };
+
+  f=function(){
+  speed = 1.5
+    for (var i = 0; i < random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2); i++){
+     var b = random(-1,3);
+       Types=random(0,1);
+      if(Types>1){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,5,0,0,1,0,1,millis(),3000));
+      }
+      }
+      else{
+      if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(500, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,500),0,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,500),500,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      }
+      };
+      };
+    
+
+
+
+  if (Enemys.length === 0){
+        speed = 1
+    RoundTime=millis();
+    faze=faze+1
+    if(faze%2===0){
+    RoundType=ceil(random(0,3))
+    if(RoundType===1){
+    for (var i = 0; i <(random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2)); i++){
+     var b = random(-1,3);
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),0,0,0,1,0,1,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),0,0,0,1,0,1,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,0,0,0,1,0,1,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,0,0,0,1,0,1,millis(),random(3000,5000)));
+      }
+      }
+      };
+    if(RoundType===2){
+    for (var i = 0; i <(random(sqrt(Score)/8,sqrt(Score)/4)); i++){
+     var b = random(-1,3);
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,50,0,6,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,50,0,6,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,50,0,6,millis(),random(3000,5000)));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,50,0,6,millis(),random(3000,5000)));
+      }
+      };
+    }
+    if(RoundType===3){
+    setTimeout(f(),3000);
+    }
+    }
+    else{ 
+        speed = 1
+    RoundType=0
+    for (var i = 0; i < random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2); i++){
+     var b = random(-1,3);
+       Types=random(0,1);
+      if(Types>0.95){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,5,0,0,1,0,1,millis(),3000));
+      }
+      }
+      /*
+       else if(Types<0.5 && Types>0.4375){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),5,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),5,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,5,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,5,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      }
+      else if(Types<0.4375 && Types>0.375){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),5,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),5,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,5,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,5,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      }
+      else if(Types<0.375 && Types>0.3125){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      }
+       else if(Types<0.3125 && Types>0.25){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      }
+      */
+      else{
+      if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(500, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,500),0,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,500),500,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      }
+      };
+      }
+      }
+      if (millis()-RoundTime>20000){
+      speed = 1
+     RoundType=0
+     faze=faze+1
+    RoundTime=millis();
+     RoundTime=millis();
+    for (var i = 0; i < random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2); i++){
+     var b = random(-1,3);
+       Types=random(0,1);
+      if(Types>0.95){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,5,0,0,1,0,1,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,5,0,0,1,0,1,millis(),3000));
+      }
+      }
+      /*
+       else if(Types<0.5 && Types>0.4375){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,2,millis(),3000));
+      }
+      }
+      else if(Types<0.4375 && Types>0.375){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,3,millis(),3000));
+      }
+      }
+      else if(Types<0.375 && Types>0.3125){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
+      }
+      }
+       else if(Types<0.3125 && Types>0.25){
+     if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      }
+      }
+      */
+      else{
+      if (ceil(b)===0){ 
+      Enemys.push(new main(0, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===1){ 
+      Enemys.push(new main(500, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===2){ 
+      Enemys.push(new main(random(0,500),0,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      if (ceil(b)===3){ 
+      Enemys.push(new main(random(0,500),500,5,0,0,ceil(random(0,3)),0,0,0,3000));
+      }
+      }
+      };
+      }
+      
+      fill(0,0,0)
+      text("Score:"+Score,10,10);
+      text("Time:"+(((millis()-Round)/100)/10)+"s",400,10);
+      text(Equiped,200,10);
+      text(keyCode,100,10);
+};
+};
+Start();
+     }};
+
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas"); 
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc); 
+ </script>
+
+</html>
