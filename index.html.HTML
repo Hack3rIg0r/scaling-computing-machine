@@ -54,7 +54,8 @@ https://github.com/Team-Code/KA_Offline -->
          var AbilityTime= 0
          var g = 0
          var Multi = 1
-
+         var downTime = 0
+         var next = 0
 
 
 	//Character Bilder
@@ -1042,11 +1043,14 @@ for (var i=0; i < Bullets.length; i++){
       }
       };
       };
-    
+    if (Enemys.length === 0 && next===0){
+    downTime=millis()
+    next=1
+    }
 
 
 
-  if (Enemys.length === 0){
+  if (Enemys.length === 0 && downTime+1000<millis()){
         speed = 1
     RoundTime=millis();
     faze=faze+1
