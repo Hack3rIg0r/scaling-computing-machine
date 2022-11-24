@@ -54,6 +54,8 @@ https://github.com/Team-Code/KA_Offline -->
          var AbilityTime= 0
          var g = 0
          var Multi = 1
+         var downTime = 0
+         var next = 0
 
 
 
@@ -598,7 +600,7 @@ draw = function(){
    if (e===0 && c===0){
    if (Equiped===0){
    if (millis()-Delay>100){
-       Bullets.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+       Bullets.push(new main(Hero.x,Hero.y,5,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
    Delay=millis();
    }
    }
@@ -750,6 +752,7 @@ for (var i=0; i < Bombs.length; i++){
    }
    };
 for (var i=0; i < Bullets.length; i++){
+   for (var j=0; j<2; j++){
    Bullets[i].fire();
    if(TeleDone===0){
    TeleDone=1
@@ -947,6 +950,7 @@ for (var i=0; i < Bullets.length; i++){
    }
    };
    };
+   };
 
 
 
@@ -1042,15 +1046,18 @@ for (var i=0; i < Bullets.length; i++){
       }
       };
       };
-    
+
+   downTime = millis();
+   next = 1;
 
 
 
-  if (Enemys.length === 0){
+  if (Enemys.length === 0 && downTime+10000 < millis() ){
         speed = 1
+    next = 0
     RoundTime=millis();
     faze=faze+1
-    if(faze%2===0){
+    if(faze%4===0){
     RoundType=ceil(random(0,3))
     if(RoundType===1){
     for (var i = 0; i <(random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2)); i++){
