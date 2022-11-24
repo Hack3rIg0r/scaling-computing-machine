@@ -1046,10 +1046,10 @@ for (var i=0; i < Bullets.length; i++){
       }
       };
       };
-
+ if (Enemys.length === 0 && next===0){
    downTime = millis();
    next = 1;
-
+}
 
 
   if (Enemys.length === 0 && downTime+10000 < millis() ){
