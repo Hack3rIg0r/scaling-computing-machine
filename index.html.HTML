@@ -99,14 +99,14 @@ text(this.text,this.x+this.Width/8,this.y+this.Height/2);
 
 	//My Buttons
 var StartBTN = new Button(170,300,150,50,"Play");
-var StartBTN1 = new Button(100,300,300,50,"Play Again");
+var StartBTN1 = new Button(30,300,200,50,"Play Again");
 var pierceBTN = new Button(50,250,150,200,"pierce");
 var scatherBTN = new Button(310,250,150,200,"scather");
 var BombBTN = new Button(200,250,110,200,"Bomb");
 var TeleBTN = new Button(50,250,150,200,"Freeze");
 var PoundBTN = new Button(310,250,150,200,"Ground Pound")
 var TripleBTN = new Button(200,250,110,200,"3x")
-
+var ChangeWeoponBTN = new Button(260,300,200,50,"change weopon")
 
 	//Drawing Players Character     
 main.prototype.draw= function() {
@@ -417,6 +417,7 @@ mousePressed = function(){
   draw=function(){
  background(252,252,252);
  StartBTN1.draw();
+ ChangeWeoponBTN.draw();
  textSize(50);
  text("Game Over",130,150);
  textSize(30)
@@ -429,6 +430,16 @@ mousePressed = function(){
  if (StartBTN1.y+StartBTN1.Height>mouseY){
      c = 0;
      Game();
+ }
+ }
+ }
+ }
+ if (ChangeWeoponBTN.x<mouseX){
+ if (ChangeWeoponBTN.x+ChangeWeoponBTN.Width>mouseX){
+ if (ChangeWeoponBTN.y<mouseY){
+ if (ChangeWeoponBTN.y+ChangeWeoponBTN.Height>mouseY){
+     c = 0;
+     ChooseWeopon();
  }
  }
  }
@@ -687,7 +698,7 @@ for (var i=0; i < Bombs.length; i++){
    if ((Enemys[m].x-DETx)*(Enemys[m].x-DETx)+(Enemys[m].y-DETy)*(Enemys[m].y-DETy)<2500){
    Enemys[m].HP=Enemys[m].HP-1
    Score=Score+Multi
-   if(Enemys[m].HP===0){
+   if(Enemys[m].HP<0){
    Enemys.splice(m,1);
    m=m-1
    }
@@ -961,7 +972,7 @@ for (var i=0; i < Bullets.length; i++){
         s=1
         Enemys[j].HP=Enemys[j].HP-1
         Bullets.splice(i,1);
-   if(Enemys[j].HP===0){
+   if(Enemys[j].HP<0){
     Enemys.splice(j,1);
     Score=Score+20*Multi
    }
