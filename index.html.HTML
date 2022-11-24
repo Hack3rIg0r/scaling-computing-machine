@@ -54,8 +54,6 @@ https://github.com/Team-Code/KA_Offline -->
          var AbilityTime= 0
          var g = 0
          var Multi = 1
-         var downtime = 0
-         var next = 0
 
 
 
@@ -600,7 +598,7 @@ draw = function(){
    if (e===0 && c===0){
    if (Equiped===0){
    if (millis()-Delay>100){
-       Bullets.push(new main(Hero.x,Hero.y,5,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+       Bullets.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
    Delay=millis();
    }
    }
@@ -639,7 +637,14 @@ mouseReleased = function(){
    };
 
 for (var i=0; i < Bombs.length; i++){
+    if(TeleDone===0){
+   TeleDone=1
    Bombs[i].move();
+   TeleDone=0
+   }
+   else{
+   Bombs[i].move();
+   }
    Bombs[i].fire1();
    var d = 0;
    if (d===0){
@@ -745,33 +750,6 @@ for (var i=0; i < Bombs.length; i++){
    }
    };
 for (var i=0; i < Bullets.length; i++){
-   var d = 0;
-   if (d===0){
-   if (Bullets[i].x>500){
-   Bullets.splice(i,1);
-   d = 1;
-   }
-   }
-   if (d===0){
-   if (Bullets[i].x<0){
-   Bullets.splice(i,1);
-   d = 1;
-   }
-   }
-   if (d===0){
-   if (Bullets[i].y>500){
-   Bullets.splice(i,1);
-   d = 1;
-   }
-   }
-   if (d===0){
-   if (Bullets[i].y<0){
-   Bullets.splice(i,1);
-   d = 1;
-   }
-   }
-   if (d===0){
-   for (var j=0; j<2; j++){
    Bullets[i].fire();
    if(TeleDone===0){
    TeleDone=1
@@ -969,8 +947,6 @@ for (var i=0; i < Bullets.length; i++){
    }
    };
    };
-   }
-   };
 
 
 
@@ -1066,18 +1042,15 @@ for (var i=0; i < Bullets.length; i++){
       }
       };
       };
- if (Enemys.length === 0 && next===0){
-   downtime = millis();
-   next = 1;
-}
+    
 
-  if(downtime+1000<millis()){
+
+
   if (Enemys.length === 0){
-    speed = 1
-    next = 0
+        speed = 1
     RoundTime=millis();
     faze=faze+1
-    if(faze%4===0){
+    if(faze%2===0){
     RoundType=ceil(random(0,3))
     if(RoundType===1){
     for (var i = 0; i <(random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2)); i++){
@@ -1212,7 +1185,6 @@ for (var i=0; i < Bullets.length; i++){
       };
       }
       }
-      }
       if (millis()-RoundTime>20000){
       speed = 1
      RoundType=0
@@ -1315,7 +1287,7 @@ for (var i=0; i < Bullets.length; i++){
       text("Score:"+Score,10,10);
       text("Time:"+(((millis()-Round)/100)/10)+"s",400,10);
       text(Equiped,200,10);
-      text(next,100,10);
+      text(keyCode,100,10);
 };
 };
 Start();
