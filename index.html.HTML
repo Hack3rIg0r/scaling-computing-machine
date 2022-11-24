@@ -54,7 +54,7 @@ https://github.com/Team-Code/KA_Offline -->
          var AbilityTime= 0
          var g = 0
          var Multi = 1
-         var downTime = 0
+         var downtime = 0
          var next = 0
 
 
@@ -1067,12 +1067,12 @@ for (var i=0; i < Bullets.length; i++){
       };
       };
  if (Enemys.length === 0){
-   downTime = millis();
+   downtime = millis();
    next = 1;
 }
 
-  if(downTime+1000<millis()){
-  if (Enemys.length === 0 ){
+  if(downtime+10000<millis()){
+  if (Enemys.length === 0){
     speed = 1
     next = 0
     RoundTime=millis();
@@ -1315,7 +1315,7 @@ for (var i=0; i < Bullets.length; i++){
       text("Score:"+Score,10,10);
       text("Time:"+(((millis()-Round)/100)/10)+"s",400,10);
       text(Equiped,200,10);
-      text(keyCode,100,10);
+      text(next,100,10);
 };
 };
 Start();
