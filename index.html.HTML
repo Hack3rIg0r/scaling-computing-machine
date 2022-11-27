@@ -10,6 +10,39 @@ https://github.com/Team-Code/KA_Offline -->
 	<!--This draws the Canvas on the webpage -->
       <canvas id="mycanvas"></canvas> 
     </p>
+ <h1>Information</h1>
+ <ul>
+            <li><a href="#general_controls">General controls</a></li>
+            <li><a href="#shots">Shots</a></li>
+            <li><a href="#abilities">Abilities</a></li>
+            <li><a href="#enemy">Enemy info</a></li>
+        </ul>
+  <h2 id="general_controls">General controls</h2>
+  <ul>
+  <li>Arrows: arrows are used to move</li>
+  <li>W: change weopon</li>
+  <li>E: use ability</li>
+  <li>Mouse pressed: shoot(you can hold)</li>
+  </ul>
+  <h2 id="shots">Shots</h2>
+  <ul>
+  <li>Regular: 10 shots/s</li>
+  <li>Bomb: when an enemy is hit, -1hp for all enemies in a radius of 50, if it hits big cube -10hp, 1 shot/s</li>
+  <li>Pierce: shot goes through multiple enemies, 4 shots/s </li>
+  <li>scather: shoot 20 bullets in a spread, 1 shot/s </li>
+  </ul>
+  <h2 id="abilities">Abilities</h2>
+  <ul>
+  <li>Freeze: all enemies stop for 5s every 15s</li>
+  <li>3x: triples points for 10s every 20s </li>
+  <li>pound: kill all enemies in a radius of 100 every 15s</li>
+  </ul>
+  <h2 id="enemy">Enemy info</h2>
+  <ul>
+  <li>normal enemies: green:3 HP yellow: 2 HP red:1 HP</li>
+  <li>blue enemies: shoots at you </li>
+  <li>big cube: shoots at you, slower, 50HP gets darker when it has less HP</li>
+  </ul>
  </body>
  
  <!-- Run all the JavaScript stuff -->
@@ -104,7 +137,7 @@ var pierceBTN = new Button(50,250,150,200,"pierce");
 var scatherBTN = new Button(310,250,150,200,"scather");
 var BombBTN = new Button(200,250,110,200,"Bomb");
 var TeleBTN = new Button(50,250,150,200,"Freeze");
-var PoundBTN = new Button(310,250,150,200,"Ground Pound")
+var PoundBTN = new Button(310,250,150,200,"Pound")
 var TripleBTN = new Button(200,250,110,200,"3x")
 var ChangeWeoponBTN = new Button(260,300,200,50,"change weopon")
 
@@ -176,7 +209,7 @@ main.prototype.move1= function(){
      }
      if(keyCode === 69){
      if(Ability===1){
-     if(TeleTime+10000 <millis()){
+     if(TeleTime+15000 <millis()){
      TimeStop = millis()
      TeleDone=0;
      AbilityTime= millis()
@@ -205,9 +238,11 @@ main.prototype.move1= function(){
      }
      }
      if(Ability===3){
+     if(TeleTime+20000 <millis()){
      Multi=3
      g=1
      AbilityTime= millis()
+     }
      }
      }
       if (Time>600){
@@ -507,9 +542,9 @@ draw = function(){
     }
     fill(252,0,0);
     if (Ability===1){
-    if(10000-(millis()-TeleTime)>0){
+    if(15000-(millis()-TeleTime)>0){
     fill(252,0,0);
-    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/10000);
+    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/15000);
     }
     else{
      fill(0,0,252);
@@ -532,9 +567,9 @@ draw = function(){
     }
     }
     if (Ability===3){
-    if(30000-(millis()-TeleTime)>0){
+    if(20000-(millis()-TeleTime)>0){
     fill(252,0,0);
-    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/30000);
+    arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/20000);
     }
     else{
      fill(0,0,252);
@@ -698,7 +733,7 @@ for (var i=0; i < Bombs.length; i++){
    if ((Enemys[m].x-DETx)*(Enemys[m].x-DETx)+(Enemys[m].y-DETy)*(Enemys[m].y-DETy)<2500){
    Enemys[m].HP=Enemys[m].HP-1
    Score=Score+Multi
-   if(Enemys[m].HP<0){
+   if(Enemys[m].HP<1){
    Enemys.splice(m,1);
    m=m-1
    }
@@ -726,7 +761,7 @@ for (var i=0; i < Bombs.length; i++){
    for(var m=0; m < Enemys.length; m++){
    if ((Enemys[m].x-DETx)*(Enemys[m].x-DETx)+(Enemys[m].y-DETy)*(Enemys[m].y-DETy)<2500){
    Enemys[m].HP=Enemys[m].HP-1
-   if(Enemys[m].HP<0){
+   if(Enemys[m].HP<1){
    Enemys.splice(m,1);
    Score=Score+20*Multi
    m=m-1
