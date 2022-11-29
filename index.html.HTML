@@ -10,6 +10,7 @@ https://github.com/Team-Code/KA_Offline -->
 	<!--This draws the Canvas on the webpage -->
       <canvas id="mycanvas"></canvas> 
     </p>
+ <h1><a href="https://docs.google.com/forms/d/e/1FAIpQLSeqz4LwxwsPC7kdUHSd4q551SfhMd_EMoXgPeV72Sz9MYyKzw/viewform?usp=sf_link">Rate the game here</a></h1>
  <h1>Information</h1>
  <ul>
             <li><a href="#general_controls">General controls</a></li>
@@ -111,35 +112,39 @@ rect(x,y,Width,Height)
 }
 
 	//Button Bilder
-var Button = function(x,y,Width,Height,text){
+var Button = function(x,y,Width,Height,text,textsize,fill1,fill2,fill3){
 this.x=x;
 this.y=y;
 this.Height=Height;
 this.Width=Width;
 this.text=text;
+this.textsize=textsize;
+this.fill1=fill1;
+this.fill2=fill2;
+this.fill3=fill3;
 };
 
 
 	//Drawing Button
 Button.prototype.draw=function(){
-fill(0, 251, 255);
+fill(this.fill1, this.fill2, this.fill3);
 rect(this.x,this.y,this.Width,this.Height);
 fill(0,0,0);
-textSize(30);
+textSize(this.textsize);
 text(this.text,this.x+this.Width/8,this.y+this.Height/2);
 };
 
 
 	//My Buttons
-var StartBTN = new Button(170,300,150,50,"Play");
-var StartBTN1 = new Button(30,300,200,50,"Play Again");
-var pierceBTN = new Button(50,250,150,200,"pierce");
-var scatherBTN = new Button(310,250,150,200,"scather");
-var BombBTN = new Button(200,250,110,200,"Bomb");
-var TeleBTN = new Button(50,250,150,200,"Freeze");
-var PoundBTN = new Button(310,250,150,200,"Pound")
-var TripleBTN = new Button(200,250,110,200,"3x")
-var ChangeWeoponBTN = new Button(260,300,200,50,"change weopon")
+var StartBTN = new Button(170,300,150,50,"Play",30, 0, 251, 255);
+var StartBTN1 = new Button(30,300,200,50,"Play Again",30, 0, 251, 255);
+var pierceBTN = new Button(50,250,150,200,"pierce",30, 0, 251, 255);
+var scatherBTN = new Button(310,250,150,200,"scather",30, 0, 251, 255);
+var BombBTN = new Button(200,250,110,200,"Bomb",30, 0, 251, 255);
+var TeleBTN = new Button(50,250,150,200,"Freeze",30, 0, 251, 255);
+var PoundBTN = new Button(310,250,150,200,"Pound",30, 0, 251, 255)
+var TripleBTN = new Button(200,250,110,200,"3x",30, 0, 251, 255)
+var ChangeWeoponBTN = new Button(260,300,200,50,"change weopon",20, 0, 251, 255)
 
 	//Drawing Players Character     
 main.prototype.draw= function() {
@@ -325,6 +330,21 @@ main.prototype.fire3= function(){
  fill(255, 0, 0);
  ellipse(430,335+sin(y/50)*50,130,130);
  y=y+1;
+  StartBTN.fill1=0
+ StartBTN.fill2=251
+ StartBTN.fill3=255 
+ if (StartBTN.x<mouseX){
+ if (StartBTN.x+StartBTN.Width>mouseX){
+ if (StartBTN.y<mouseY){
+ if (StartBTN.y+StartBTN.Height>mouseY){
+ StartBTN.fill1=15
+ StartBTN.fill2=15
+ StartBTN.fill3=255
+ }
+ }
+ }
+ }
+
  mousePressed = function(){
  if (c ===1){
  if (StartBTN.x<mouseX){
@@ -352,6 +372,49 @@ draw=function(){
 BombBTN.draw();
 pierceBTN.draw();
 scatherBTN.draw();
+ BombBTN.fill1=0
+ BombBTN.fill2=251
+ BombBTN.fill3=255
+ pierceBTN.fill1=0
+ pierceBTN.fill2=251
+ pierceBTN.fill3=255
+ scatherBTN.fill1=0
+ scatherBTN.fill2=251
+ scatherBTN.fill3=255
+ if (BombBTN.x<mouseX){
+ if (BombBTN.x+BombBTN.Width>mouseX){
+ if (BombBTN.y<mouseY){
+ if (BombBTN.y+BombBTN.Height>mouseY){
+ BombBTN.fill1=15
+ BombBTN.fill2=15
+ BombBTN.fill3=255
+   
+ }
+ }
+ }
+ }
+ if (pierceBTN.x<mouseX){
+ if (pierceBTN.x+pierceBTN.Width>mouseX){
+ if (pierceBTN.y<mouseY){
+ if (pierceBTN.y+pierceBTN.Height>mouseY){
+ pierceBTN.fill1=15
+ pierceBTN.fill2=15
+ pierceBTN.fill3=255
+ }
+ }
+ }
+ }
+ if (scatherBTN.x<mouseX){
+ if (scatherBTN.x+scatherBTN.Width>mouseX){
+ if (scatherBTN.y<mouseY){
+ if (scatherBTN.y+scatherBTN.Height>mouseY){
+ scatherBTN.fill1=15
+ scatherBTN.fill2=15
+ scatherBTN.fill3=255
+ }
+ }
+ }
+ }
 mousePressed = function(){
  if (c ===2){
  if (BombBTN.x<mouseX){
@@ -402,6 +465,49 @@ draw=function(){
 TeleBTN.draw();
 PoundBTN.draw();
 TripleBTN.draw();
+ TeleBTN.fill1=0
+ TeleBTN.fill2=251
+ TeleBTN.fill3=255
+ PoundBTN.fill1=0
+ PoundBTN.fill2=251
+ PoundBTN.fill3=255
+ TripleBTN.fill1=0
+ TripleBTN.fill2=251
+ TripleBTN.fill3=255
+ if (TeleBTN.x<mouseX){
+ if (TeleBTN.x+TeleBTN.Width>mouseX){
+ if (TeleBTN.y<mouseY){
+ if (TeleBTN.y+TeleBTN.Height>mouseY){
+ TeleBTN.fill1=15
+ TeleBTN.fill2=15
+ TeleBTN.fill3=255
+   
+ }
+ }
+ }
+ }
+ if (PoundBTN.x<mouseX){
+ if (PoundBTN.x+PoundBTN.Width>mouseX){
+ if (PoundBTN.y<mouseY){
+ if (PoundBTN.y+PoundBTN.Height>mouseY){
+ PoundBTN.fill1=15
+ PoundBTN.fill2=15
+ PoundBTN.fill3=255
+ }
+ }
+ }
+ }
+  if (TripleBTN.x<mouseX){
+ if (TripleBTN.x+TripleBTN.Width>mouseX){
+ if (TripleBTN.y<mouseY){
+ if (TripleBTN.y+TripleBTN.Height>mouseY){
+ TripleBTN.fill1=15
+ TripleBTN.fill2=15
+ TripleBTN.fill3=255
+ }
+ }
+ }
+ }
 mousePressed = function(){
  if (c ===2){
  if (TeleBTN.x<mouseX){
@@ -458,6 +564,35 @@ mousePressed = function(){
  textSize(30)
  text("Final Score:"+Score,170,230);
   text("Highscore:"+max(High),170,270);
+StartBTN1.fill1=0
+StartBTN1.fill2=251
+StartBTN1.fill3=255
+ChangeWeoponBTN.fill1=0
+ChangeWeoponBTN.fill2=251
+ChangeWeoponBTN.fill3=255
+ if (StartBTN1.x<mouseX){
+ if (StartBTN1.x+StartBTN1.Width>mouseX){
+ if (StartBTN1.y<mouseY){
+ if (StartBTN1.y+StartBTN1.Height>mouseY){
+StartBTN1.fill1=15
+StartBTN1.fill2=15
+StartBTN1.fill3=255
+
+ }
+ }
+ }
+ }
+ if (ChangeWeoponBTN.x<mouseX){
+ if (ChangeWeoponBTN.x+ChangeWeoponBTN.Width>mouseX){
+ if (ChangeWeoponBTN.y<mouseY){
+ if (ChangeWeoponBTN.y+ChangeWeoponBTN.Height>mouseY){
+ChangeWeoponBTN.fill1=15
+ChangeWeoponBTN.fill2=15
+ChangeWeoponBTN.fill3=251
+ }
+ }
+ }
+ }
  mousePressed = function(){
  if (StartBTN1.x<mouseX){
  if (StartBTN1.x+StartBTN1.Width>mouseX){
