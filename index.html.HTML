@@ -4,14 +4,6 @@ https://github.com/Team-Code/KA_Offline -->
 <html> 
  <head>
     <title>Processing.JS inside Webpages: Template</title> 
-    <script type="text/javascript">
-        function insert(){
-            var src = document.getElementById("gamediv");
-            var img = document.createElement("img");
-            img.src = "img/eqp/"+this.apparel+"/"+this.facing+"https://cdn.britannica.com/60/8160-050-08CCEABC/German-shepherd.jpg";
-            src.appendChild(img);
-        }
-     </script>
 </head>
 <style>
 body{
@@ -58,7 +50,6 @@ body{
   <li>big cube: shoots at you, slower, 50HP gets darker when it has less HP</li>
   <li>shielded: cannot be hit on one side.</li>
   </ul>
-  <img/>
   <div id="gamediv">
  </body>
  
@@ -414,7 +405,6 @@ main.prototype.fire3= function(){
  var y = 0;
  draw=function(){
  background(3, 98, 0);
-insert();
  StartBTN.draw();
  textSize(50);
  text("Circles vs Squares",70,150);
