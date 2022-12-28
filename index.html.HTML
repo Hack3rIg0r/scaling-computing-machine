@@ -18,6 +18,7 @@ body{
 	background-color: rgb(2, 0, 163);
 }
 </style>
+    <h1>Im sure you wont get a 1000 or more points?<h1>
     <p align="center"> 
 	<!--This draws the Canvas on the webpage -->
       <canvas id="mycanvas"></canvas> 
@@ -958,7 +959,7 @@ draw = function(){
         c=1;
          Enemys.splice(0,Enemys.length);
          bigguy=1
-   if(Score<10){
+   if(Score<1000){
         GameOver();
    }
    else{
@@ -976,7 +977,7 @@ draw = function(){
   if (Enemys[i].y+45>Hero.y){
   Enemys.splice(0,Enemys.length);
         c=1;
-   if(Score<10){
+   if(Score<1000){
         GameOver();
    }
    else{
@@ -1141,7 +1142,12 @@ for (var i=0; i < Bombs.length; i++){
    if (Hero.y-2.5<EnBullets[i].y){
    if (Hero.y+12.5>EnBullets[i].y){
         EnBullets.splice(i,1);
+        if(Score<1000){
         GameOver();
+        }
+        else{
+        Secret();
+        }
         c=1;
    }
    }
@@ -1622,7 +1628,7 @@ for (var i=0; i < Bullets.length; i++){
       }
 };
 };
-Secret();
+Start();
      }
      };
 
