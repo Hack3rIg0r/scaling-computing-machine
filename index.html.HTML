@@ -4,8 +4,20 @@ https://github.com/Team-Code/KA_Offline -->
 <html> 
  <head>
     <title>Processing.JS inside Webpages: Template</title> 
+    <script type="text/javascript">
+        function insert(){
+            var src = document.getElementById("gamediv");
+            var img = document.createElement("img");
+            img.src = "img/eqp/"+this.apparel+"/"+this.facing+"https://cdn.britannica.com/60/8160-050-08CCEABC/German-shepherd.jpg";
+            src.appendChild(img);
+        }
+     </script>
 </head>
- <body>
+<style>
+body{
+	background-color: rgb(2, 0, 163);
+}
+</style>
     <p align="center"> 
 	<!--This draws the Canvas on the webpage -->
       <canvas id="mycanvas"></canvas> 
@@ -20,30 +32,33 @@ https://github.com/Team-Code/KA_Offline -->
         </ul>
   <h2 id="general_controls">General controls</h2>
   <ul>
-  <li>Arrows: arrows are used to move</li>
-  <li>W: change weopon</li>
-  <li>E: use ability</li>
+  <li>Movement:ASDW</li>
+  <li>E: change weapon</li>
+  <li>R: use ability</li>
   <li>Mouse pressed: shoot(you can hold)</li>
   </ul>
   <h2 id="shots">Shots</h2>
   <ul>
-  <li>Regular: 10 shots/s</li>
-  <li>Bomb: when an enemy is hit, -1hp for all enemies in a radius of 50, if it hits big cube -10hp, 1 shot/s</li>
-  <li>Pierce: shot goes through multiple enemies, 4 shots/s </li>
-  <li>scather: shoot 20 bullets in a spread, 1 shot/s </li>
+  <li>Handgun: 10 shots/s</li>
+  <li>RPG: when an enemy is hit, -1hp for all enemies in a radius of 50, if it hits big cube -10hp, 1 shot/s</li>
+  <li>Sniper: shot goes through multiple enemies, 4 shots/s </li>
+  <li>Shotgun: shoot 20 bullets in a spread, 1 shot/s </li>
   </ul>
   <h2 id="abilities">Abilities</h2>
   <ul>
   <li>Freeze: all enemies stop for 5s every 15s</li>
   <li>3x: triples points for 10s every 20s </li>
-  <li>pound: kill all enemies in a radius of 100 every 15s</li>
+  <li>Ground Pound: kill all enemies in a radius of 100 every 15s</li>
   </ul>
   <h2 id="enemy">Enemy info</h2>
   <ul>
   <li>normal enemies: green:3 HP yellow: 2 HP red:1 HP</li>
   <li>blue enemies: shoots at you </li>
   <li>big cube: shoots at you, slower, 50HP gets darker when it has less HP</li>
+  <li>shielded: cannot be hit on one side.</li>
   </ul>
+  <img/>
+  <div id="gamediv">
  </body>
  
  <!-- Run all the JavaScript stuff -->
@@ -90,7 +105,10 @@ https://github.com/Team-Code/KA_Offline -->
          var Multi = 1
          var downTime = 0
          var next = 0
-
+         var bigguy = 0
+         var beta = 0
+         var RepelX = 0
+         var RepelY = 0
 
 	//Character Bilder
          var main = function(x,y,v,Vx,Vy,HP,Hit,Type,Recoil,next){
@@ -124,6 +142,67 @@ this.fill2=fill2;
 this.fill3=fill3;
 };
 
+//event listener
+window.addEventListener("keydown", onKeyDown, false);
+window.addEventListener("keyup", onKeyUp, false);
+
+function onKeyDown(event){
+  var keyCode = event.keyCode;
+  switch(keyCode){
+    case 68:  //d
+        keyD = true;
+    break;
+    case 83:  //s
+        keyS = true;
+    break;
+    case 65:  //a
+        keyA = true;
+    break;
+  case 87: //w
+        keyW = true;
+    break;
+  }
+}
+function onKeyUp(event){
+  var keyCode = event.keyCode;
+  switch(keyCode){
+    case 68:  //d
+        keyD = false;
+    break;
+    case 83:  //s
+        keyS = false;
+    break;
+    case 65: //a
+        keyA = false;
+    break;
+     case 87: //w
+        keyW = false;
+    break;
+  }
+}
+
+
+var keyW = false;
+var keyA = false;
+var keyS = false;
+var keyD = false;
+
+
+main.prototype.ASDW= function() {
+if(keyD == true){
+this.x=this.x+this.v*speed;
+}
+if(keyS == true){
+this.y=this.y+this.v*speed;
+}
+if(keyA == true){
+this.x=this.x-this.v*speed;
+}
+if(keyW == true){
+this.y=this.y-this.v*speed;
+}
+  };
+
 
 	//Drawing Button
 Button.prototype.draw=function(){
@@ -137,14 +216,14 @@ text(this.text,this.x+this.Width/8,this.y+this.Height/2);
 
 	//My Buttons
 var StartBTN = new Button(170,300,150,50,"Play",30, 0, 251, 255);
-var StartBTN1 = new Button(30,300,200,50,"Play Again",30, 0, 251, 255);
-var pierceBTN = new Button(50,250,150,200,"pierce",30, 0, 251, 255);
-var scatherBTN = new Button(310,250,150,200,"scather",30, 0, 251, 255);
-var BombBTN = new Button(200,250,110,200,"Bomb",30, 0, 251, 255);
+var StartBTN1 = new Button(30,420,200,50,"Play Again",30, 0, 251, 255);
+var pierceBTN = new Button(50,250,150,200,"Sniper",30, 0, 251, 255);
+var scatherBTN = new Button(310,250,150,200,"Shotgun",30, 0, 251, 255);
+var BombBTN = new Button(200,250,110,200,"RPG",30, 0, 251, 255);
 var TeleBTN = new Button(50,250,150,200,"Freeze",30, 0, 251, 255);
-var PoundBTN = new Button(310,250,150,200,"Pound",30, 0, 251, 255)
+var PoundBTN = new Button(310,250,150,200,"Ground\n Pound",30, 0, 251, 255)
 var TripleBTN = new Button(200,250,110,200,"3x",30, 0, 251, 255)
-var ChangeWeoponBTN = new Button(260,300,200,50,"change weopon",20, 0, 251, 255)
+var ChangeWeoponBTN = new Button(260,420,200,50,"change weapon",20, 0, 251, 255)
 
 	//Drawing Players Character     
 main.prototype.draw= function() {
@@ -200,8 +279,8 @@ main.prototype.move1= function(){
      if (keyCode === 37){
       this.x=this.x-this.v*speed;
      }
-     if (keyCode === 87){
-     if (keyCode === 87){
+     if (keyCode === 69){
+     if (keyCode === 69){
      if(millis()-t>600)
      if(Equiped===WeoponType){
      Equiped=0;
@@ -212,7 +291,7 @@ main.prototype.move1= function(){
      }
      }
      }
-     if(keyCode === 69){
+     if(keyCode === 82){
      if(Ability===1){
      if(TeleTime+15000 <millis()){
      TimeStop = millis()
@@ -261,7 +340,7 @@ main.prototype.move1= function(){
 main.prototype.move = function(){
      this.x=this.x+this.Vx*this.v*speed*TeleDone;
      this.y=this.y+this.Vy*this.v*speed*TeleDone;
-if(this.Type===1){
+ if(this.Type===1){
  this.y = constrain(this.y, 0, 490);
  this.x = constrain(this.x,0,490);
 }
@@ -282,8 +361,20 @@ var Enemys=[];
 
 	//Tracking Function
 main.prototype.track=function(){
-  this.Vx=(Hero.x-this.x)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
-  this.Vy=(Hero.y-this.y)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
+  RepelX =0
+  RepelY = 0
+  if ((this.x-Hero.x)*(this.x-Hero.x)>100 && (this.y-Hero.y)*(this.y-Hero.y)>100)
+  for (var i=0; i<Enemys.length; i++){
+  if(Math.abs(this.x-Enemys[i].x)<20 && (this.x-Enemys[i].x)!=0){
+  RepelX= RepelX+200*sqrt((Hero.x-this.x)*(Hero.x-this.x)+(Hero.y-this.y)*(Hero.y-this.y))/((this.x-Enemys[i].x)*sqrt((this.x-Enemys[i].x)*(this.x-Enemys[i].x)+(this.y-Enemys[i].y)*(this.y-Enemys[i].y)))
+  }
+  if (Math.abs(this.y-Enemys[i].y)<20 && (this.y-Enemys[i].y)!=0){
+  RepelY= RepelY+200*sqrt((Hero.x-this.x)*(Hero.x-this.x)+(Hero.y-this.y)*(Hero.y-this.y))/((this.y-Enemys[i].y)*sqrt((this.x-Enemys[i].x)*(this.x-Enemys[i].x)+(this.y-Enemys[i].y)*(this.y-Enemys[i].y)))
+   }
+  };
+  this.Vx=(((Hero.x-this.x)*sqrt((Hero.x-this.x)*(Hero.x-this.x))+RepelX*sqrt(RepelX*RepelX))/Math.abs((Hero.x-this.x)*sqrt((Hero.x-this.x)*(Hero.x-this.x))+RepelX*sqrt(RepelX*RepelX)))*(sqrt(((Hero.x-this.x)*(Hero.x-this.x)+RepelX*RepelX)/((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)+RepelX*RepelX+RepelY*RepelY)));
+  this.Vy=(((Hero.y-this.y)*sqrt((Hero.y-this.y)*(Hero.y-this.y))+RepelY*sqrt(RepelY*RepelY))/Math.abs((Hero.y-this.y)*sqrt((Hero.y-this.y)*(Hero.y-this.y))+RepelY*sqrt(RepelY*RepelY)))*(sqrt(((Hero.y-this.y)*(Hero.y-this.y)+RepelY*RepelY)/((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)+RepelX*RepelX+RepelY*RepelY)));
+ 
   if(this.Type===1){
    this.Vx=-1*(Hero.x-this.x)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
   this.Vy=-1*(Hero.y-this.y)/(sqrt((this.x-Hero.x)*(this.x-Hero.x)+(this.y-Hero.y)*(this.y-Hero.y)));
@@ -321,7 +412,8 @@ main.prototype.fire3= function(){
  var Start = function(){
  var y = 0;
  draw=function(){
- background(252,252,252);
+ background(3, 98, 0);
+insert();
  StartBTN.draw();
  textSize(50);
  text("Circles vs Squares",70,150);
@@ -368,7 +460,9 @@ main.prototype.fire3= function(){
 var ChooseWeopon = function(){
 c=2
 draw=function(){
- background(252,252,252);
+ background(3, 98, 0);
+textSize(40);
+text("choose secondary weapon",10,50);
 BombBTN.draw();
 pierceBTN.draw();
 scatherBTN.draw();
@@ -461,7 +555,9 @@ mousePressed = function(){
 var ChooseAbility = function(){
 c=2
 draw=function(){
- background(252,252,252);
+ background(3, 98, 0);
+textSize(40);
+text("choose ability",125,50);
 TeleBTN.draw();
 PoundBTN.draw();
 TripleBTN.draw();
@@ -556,7 +652,7 @@ mousePressed = function(){
  Enemys.splice(i,1);
  };
   draw=function(){
- background(252,252,252);
+ background(3, 98, 0);
  StartBTN1.draw();
  ChangeWeoponBTN.draw();
  textSize(50);
@@ -564,7 +660,7 @@ mousePressed = function(){
  textSize(30)
  text("Final Score:"+Score,170,230);
   text("Highscore:"+max(High),170,270);
-StartBTN1.fill1=0
+ StartBTN1.fill1=0
 StartBTN1.fill2=251
 StartBTN1.fill3=255
 ChangeWeoponBTN.fill1=0
@@ -617,6 +713,92 @@ ChangeWeoponBTN.fill3=251
  };
  };
  };
+ var Secret = function(){
+High.push(Score);
+ for(var i=0;i<Enemys.length; i++){
+ Enemys.splice(i,1);
+ };
+  draw=function(){
+ background(255, 255,0);
+ StartBTN1.draw();
+ ChangeWeoponBTN.draw();
+ textSize(40);
+ text("Congratiulation for getting\n                   "+Score+" points",30,50);
+ textSize(30)
+ fill(255,0,0)
+ ellipse(250,250,200,200);
+ fill(255,255,255)
+ strokeWeight(1)
+ arc(250,280,150,100,0,Math.PI);
+ ellipse(200,220,25,50)
+ ellipse(300,220,25,50)
+ fill(0,0,0)
+  strokeWeight(2)
+ line(175,280,325,280)
+ line(200,280,200,316)
+  line(225,280,225,325)
+  line(250,280,250,330)
+  line(275,280,275,325)
+  line(300,280,300,316)
+  strokeWeight(1)
+  textSize(50)
+ text("Thanks for Playing!!!",20,400)
+ ellipse(300,230,10,10)
+ ellipse(200,230,10,10)
+ 
+ StartBTN1.fill1=0
+StartBTN1.fill2=251
+StartBTN1.fill3=255
+ChangeWeoponBTN.fill1=0
+ChangeWeoponBTN.fill2=251
+ChangeWeoponBTN.fill3=255
+ if (StartBTN1.x<mouseX){
+ if (StartBTN1.x+StartBTN1.Width>mouseX){
+ if (StartBTN1.y<mouseY){
+ if (StartBTN1.y+StartBTN1.Height>mouseY){
+StartBTN1.fill1=15
+StartBTN1.fill2=15
+StartBTN1.fill3=255
+
+ }
+ }
+ }
+ }
+ if (ChangeWeoponBTN.x<mouseX){
+ if (ChangeWeoponBTN.x+ChangeWeoponBTN.Width>mouseX){
+ if (ChangeWeoponBTN.y<mouseY){
+ if (ChangeWeoponBTN.y+ChangeWeoponBTN.Height>mouseY){
+ChangeWeoponBTN.fill1=15
+ChangeWeoponBTN.fill2=15
+ChangeWeoponBTN.fill3=251
+ }
+ }
+ }
+ }
+ mousePressed = function(){
+ if (StartBTN1.x<mouseX){
+ if (StartBTN1.x+StartBTN1.Width>mouseX){
+ if (StartBTN1.y<mouseY){
+ if (StartBTN1.y+StartBTN1.Height>mouseY){
+     c = 0;
+     Game();
+ }
+ }
+ }
+ }
+ if (ChangeWeoponBTN.x<mouseX){
+ if (ChangeWeoponBTN.x+ChangeWeoponBTN.Width>mouseX){
+ if (ChangeWeoponBTN.y<mouseY){
+ if (ChangeWeoponBTN.y+ChangeWeoponBTN.Height>mouseY){
+     c = 0;
+     ChooseWeopon();
+ }
+ }
+ }
+ }
+ };
+ };
+};
 
 
 
@@ -625,9 +807,15 @@ ChangeWeoponBTN.fill3=251
 
 	//Main Game
  var Game = function(){
+  Bullets =[];
+  EnBullets =[];
+  Bombs =[];
+  Pierce =[];
+  Enemys=[];
+
  RoundType=0
  TeleTime=millis()
-   faze=1
+   faze=0
    Hero.x =250;
    kill=0
    speed=1
@@ -668,14 +856,14 @@ draw = function(){
    c = 0;
    a =0;
     if(RoundType!=1){
-    background(252, 252, 252);
+    background(3, 98, 0);
     }
     if(RoundType===1){
-    background(0, 252, 0);
+    background(255, 66, 0);
     
     rect(125,125,250,250);
     }
-    fill(252,0,0);
+    textSize(30);
     if (Ability===1){
     if(15000-(millis()-TeleTime)>0){
     fill(252,0,0);
@@ -689,9 +877,12 @@ draw = function(){
     else{
     ellipse(250,450,50,50)
     }
+    fill(0,0,0);
+    text("freeze",200,450);
     }
     }
     if (Ability===2){
+    
     if(15000-(millis()-TeleTime)>0){
     fill(252,0,0);
     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+Math.PI*2-(2*Math.PI*(millis()-TeleTime))/15000);
@@ -700,8 +891,10 @@ draw = function(){
      fill(0,0,252);
      ellipse(250,450,50,50)
     }
+    fill(0,0,0);
+    text("ground\n pound",200,450);
     }
-    if (Ability===3){
+    if (Ability===3){ 
     if(20000-(millis()-TeleTime)>0){
     fill(252,0,0);
     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/20000);
@@ -715,15 +908,19 @@ draw = function(){
      fill(0,0,252);
      ellipse(250,450,50,50)
     }
+    fill(0,0,0);
+    text("3x",200,450);
     }
     }
       Hero.draw();
       Hero.move1();
+      Hero.ASDW();
 
   for (var i = 0; i < Enemys.length; i++) {
   Enemys[i].track();
   Enemys[i].move();
   Enemys[i].draw1();
+  bigguy = 0
   if (Enemys[i].Type===2){
   shield(Enemys[i].x-5, Enemys[i].y,5,10)
   }
@@ -741,38 +938,58 @@ draw = function(){
   if(Enemys[i].Recoil<millis()-Enemys[i].next){
    Enemys[i].Recoil=millis()
    Enemys[i].next=random(2000,4000);
-   EnBullets.push(new main(Enemys[i].x,Enemys[i].y,10,(Hero.x-Enemys[i].x)/(sqrt((Enemys[i].x-Hero.x)*(Enemys[i].x-Hero.x)+(Enemys[i].y-Hero.y)*(Enemys[i].y-Hero.y))),(Hero.y-Enemys[i].y)/(sqrt((Enemys[i].x-Hero.x)*(Enemys[i].x-Hero.x)+(Enemys[i].y-Hero.y)*(Enemys[i].y-Hero.y))),0,0,0,0));
+   beta=Math.atan((Hero.y-Enemys[i].y)/(Hero.x-Enemys[i].x))+random(-0.15707963267    ,0.15707963267  )
+    if(beta>-1.57079632679 && Hero.x-Enemys[i].x>0){
+       EnBullets.push(new main(Enemys[i].x,Enemys[i].y,10,Math.cos(beta),-Math.sin(-beta)));
+   }
+   else if(beta<1.57079632679 && Hero.x-Enemys[i].x>0){
+       EnBullets.push(new main(Enemys[i].x,Enemys[i].y,10,Math.cos(beta),-Math.sin(-beta),0,0,0,0));
+   }
+   else{
+    EnBullets.push(new main(Enemys[i].x,Enemys[i].y,10,-Math.cos(beta),Math.sin(-beta)));
+   }
   }
   }
   }
-  if(Enemys[i].Type<6)
   if (Enemys[i].x-5<Hero.x){
   if (Enemys[i].x+5>Hero.x){
   if (Enemys[i].y-5<Hero.y){
   if (Enemys[i].y+5>Hero.y){
+        c=1;
+         Enemys.splice(0,Enemys.length);
+         bigguy=1
+   if(Score<10){
+        GameOver();
+   }
+   else{
+   Secret();
+   }
+   }
+   }
+   }
+   }
+   if(bigguy===0){
+   if(Enemys[i].Type===6)
+  if (Enemys[i].x-5<Hero.x){
+  if (Enemys[i].x+45>Hero.x){
+  if (Enemys[i].y-5<Hero.y){
+  if (Enemys[i].y+45>Hero.y){
   Enemys.splice(0,Enemys.length);
         c=1;
-        GameOver();
-        var kill= 1
-   }
-   }
-   }
-   }
-   } 
-  if(kill===0){
-  if (Enemys[i].Type===6){
-  if (Enemys[i].x-5<Hero.x){
-  if (Enemys[i].x+35>Hero.x){
-  if (Enemys[i].y-5<Hero.y){
-  if (Enemys[i].y+35>Hero.y){
-        Enemys.splice(0,Enemys.length);
-        c=1;
+   if(Score<10){
         GameOver();
    }
+   else{
+   Secret();
    }
    }
    }
    }
+   }
+   }
+   }
+
+   if(millis()>0){
    };
    mousePressed = function(){
    e=0
@@ -780,7 +997,7 @@ draw = function(){
    if (e===0 && c===0){
    if (Equiped===0){
    if (millis()-Delay>100){
-       Bullets.push(new main(Hero.x,Hero.y,10,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
+       Bullets.push(new main(Hero.x,Hero.y,5,(mouseX-Hero.x)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),(mouseY-Hero.y)/(sqrt((Hero.x-mouseX)*(Hero.x-mouseX)+(Hero.y-mouseY)*(Hero.y-mouseY))),0,0,0,0));
    Delay=millis();
    }
    }
@@ -801,13 +1018,13 @@ draw = function(){
    for (var i=0; i < 20; i++){
    var alfa=Math.atan((mouseY-Hero.y)/(mouseX-Hero.x))+random(-0.52359877559,0.52359877559)
     if(alfa>-1.57079632679 && mouseX-Hero.x>0){
-       Bullets.push(new main(Hero.x,Hero.y,10,Math.cos(alfa),-Math.sin(-alfa)));
+       Bullets.push(new main(Hero.x,Hero.y,5,Math.cos(alfa),-Math.sin(-alfa)));
    }
    else if(alfa<1.57079632679 && mouseX-Hero.x>0){
-       Bullets.push(new main(Hero.x,Hero.y,10,Math.cos(alfa),-Math.sin(-alfa),0,0,0,0));
+       Bullets.push(new main(Hero.x,Hero.y,5,Math.cos(alfa),-Math.sin(-alfa),0,0,0,0));
    }
    else{
-    Bullets.push(new main(Hero.x,Hero.y,10,-Math.cos(alfa),Math.sin(-alfa)));
+    Bullets.push(new main(Hero.x,Hero.y,5,-Math.cos(alfa),Math.sin(-alfa)));
    }
    };
    Delay=millis();
@@ -931,33 +1148,112 @@ for (var i=0; i < Bombs.length; i++){
    }
    }
    };
+
+
+
+
 for (var i=0; i < Bullets.length; i++){
     var d = 0;
-   if (d===0){
-   if (Bullets[i].x>500){
+   if(TeleDone===0){
+   TeleDone=1
+   Bullets[i].move();
+   TeleDone=0
+   }
+   else{
+   Bullets[i].move();
+   }
+   for(var j=0; j < Enemys.length; j++){
+   if(Enemys[j].Type===2){
+   if (Enemys[j].x-7.5<Bullets[i].x){
+   if (Enemys[j].x+2.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
    Bullets.splice(i,1);
-   d = 1;
+   break;
    }
    }
-   if (d===0){
-   if (Bullets[i].x<0){
+   }
+   }
+   }
+   else if(Enemys[j].Type===3){
+   if (Enemys[j].x+7.5<Bullets[i].x){
+   if (Enemys[j].x+17.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
    Bullets.splice(i,1);
-   d = 1;
+   break;
    }
    }
-   if (d===0){
-   if (Bullets[i].y>500){
+   }
+   }
+   }
+   else if(Enemys[j].Type===4){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y+7.5<Bullets[i].y){
+   if (Enemys[j].y+17.5>Bullets[i].y){
    Bullets.splice(i,1);
-   d = 1;
+   break;
    }
    }
-   if (d===0){
-   if (Bullets[i].y<0){
+   }
+   }
+   }
+   else if(Enemys[j].Type===5){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y-7.5<Bullets[i].y){
+   if (Enemys[j].y+2.5>Bullets[i].y){
    Bullets.splice(i,1);
-   d = 1;
+   break;
    }
    }
-   if (d===0){
+   }
+   }
+   }
+   if(Enemys[j].Type<6){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   Enemys[j].HP=Enemys[j].HP-1
+        Score = Score + Multi
+   if(Enemys[j].HP===0){
+        Enemys.splice(j,1);
+        j = j-1
+   }
+   break;
+   }
+   }
+   }
+   }
+   }
+   if(Enemys[j].Type===6){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+42.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+42.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   Enemys[j].HP=Enemys[j].HP-1
+   if(Enemys[j].HP===0){
+   Score = Score + 20*Multi
+        Enemys.splice(j,1);
+        j = j-1
+   }
+   break;
+   }
+   }
+   }
+   }
+   }
+   };
+   };
+
+
+
+   for (var i=0; i < Bullets.length; i++){
+    var d = 0;
    Bullets[i].fire();
    if(TeleDone===0){
    TeleDone=1
@@ -967,194 +1263,92 @@ for (var i=0; i < Bullets.length; i++){
    else{
    Bullets[i].move();
    }
-   s=0
-   for (var j=0; j< Enemys.length; j++){
-   if (Enemys[j].Type===2 && s===0){
-   for (var x=0; x<10; x++){
-   if(s===0){
-   if (Enemys[j].x-7.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-12.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+2.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-    Bullets.splice(i,1);
-    i=i-1
-    s=1
-   }
-   }
-   }
-   }
-   else{
-   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
-        i=i-1
-        Score = Score + Multi
-   if(Enemys[j].HP===0){
-    Enemys.splice(j,1);
-   }
-   j=Enemys.length
+   for(var j=0; j < Enemys.length; j++){
+   if(Enemys[j].Type===2){
+   if (Enemys[j].x-7.5<Bullets[i].x){
+   if (Enemys[j].x+2.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   break;
    }
    }
    }
    }
    }
-   }
-   };
-   }
-   if (Enemys[j].Type===3){
-   for (var x=0; x<10; x++){
-   if(s===0){
-   if (Enemys[j].x+10<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+17.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-12.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+2.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-    Bullets.splice(i,1);
-    i=i-1
-    s=1
-   }
-   }
-   }
-   }
-   else{
-   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
-        i=i-1
-        Score = Score + Multi
-   if(Enemys[j].HP===0){
-    Enemys.splice(j,1);
-   }
-   j=Enemys.length
+   else if(Enemys[j].Type===3){
+   if (Enemys[j].x+7.5<Bullets[i].x){
+   if (Enemys[j].x+17.5>Bullets[i].x){
+   if (Enemys[j].y-2.5<Bullets[i].y){
+   if (Enemys[j].y+12.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   break;
    }
    }
    }
    }
    }
-   }
-   };
-   }
-     if (Enemys[j].Type===4 && s===0){
-   for (var x=0; x<10; x++){
-   if(s===0){
-    if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+7.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-    Bullets.splice(i,1);
-    i=i-1
-    s=1
-   }
-   }
-   }
-   }
-   else{
-   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
-        i=i-1
-        Score = Score + Multi
-   if(Enemys[j].HP===0){
-    Enemys.splice(j,1);
-   }
-   j=Enemys.length
+   else if(Enemys[j].Type===4){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y+7.5<Bullets[i].y){
+   if (Enemys[j].y+17.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   break;
    }
    }
    }
    }
    }
-   }
-   };
-   }
-     if (Enemys[j].Type===5 && s===0){
-   for (var x=0; x<10; x++){
-   if(s===0){
-    if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-7.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y>Bullets[i].y-Bullets[i].Vy*(10-x)){
-    Bullets.splice(i,1);
-    i=i-1
-    s=1
-   }
-   }
-   }
-   }
-  else{
-   if (Enemys[j].x-2.5<Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].x+12.5>Bullets[i].x-Bullets[i].Vx*(10-x)){
-   if (Enemys[j].y-2.5<Bullets[i].y-Bullets[i].Vy*(10-x)){
-   if (Enemys[j].y+12.5>Bullets[i].y-Bullets[i].Vy*(10-x)){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
-        i=i-1
-        Score = Score + Multi
-   if(Enemys[j].HP===0){
-    Enemys.splice(j,1);
-   }
-   j=Enemys.length
+   else if(Enemys[j].Type===5){
+   if (Enemys[j].x-2.5<Bullets[i].x){
+   if (Enemys[j].x+12.5>Bullets[i].x){
+   if (Enemys[j].y-7.5<Bullets[i].y){
+   if (Enemys[j].y+2.5>Bullets[i].y){
+   Bullets.splice(i,1);
+   break;
    }
    }
    }
    }
    }
-   }
-   };
-   }
-   if(s===0){
    if(Enemys[j].Type<6){
    if (Enemys[j].x-2.5<Bullets[i].x){
    if (Enemys[j].x+12.5>Bullets[i].x){
    if (Enemys[j].y-2.5<Bullets[i].y){
    if (Enemys[j].y+12.5>Bullets[i].y){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
+   Bullets.splice(i,1);
+   Enemys[j].HP=Enemys[j].HP-1
         Score = Score + Multi
-   if(Enemys[j].HP===0){
-    Enemys.splice(j,1);
+    if(Enemys[j].HP===0){
+        Enemys.splice(j,1);
+        j = j-1
    }
-   j=Enemys.length
-   }
-   }
-   }
+   break;
    }
    }
    }
-   if(s===0){
-   if (Enemys[j].Type===6){
+   }
+   }
+   if(Enemys[j].Type===6){
    if (Enemys[j].x-2.5<Bullets[i].x){
    if (Enemys[j].x+42.5>Bullets[i].x){
    if (Enemys[j].y-2.5<Bullets[i].y){
    if (Enemys[j].y+42.5>Bullets[i].y){
-        s=1
-        Enemys[j].HP=Enemys[j].HP-1
-        Bullets.splice(i,1);
-   if(Enemys[j].HP<0){
-    Enemys.splice(j,1);
-    Score=Score+20*Multi
+   Bullets.splice(i,1);
+   Enemys[j].HP=Enemys[j].HP-1
+   if(Enemys[j].HP===0){
+   Score = Score + 20*Multi
+        Enemys.splice(j,1);
+        j = j-1
    }
-   j=Enemys.length
-   }
-   }
+   break;
    }
    }
    }
    }
+   }    
    };
-   }
    };
 
 
@@ -1263,7 +1457,7 @@ for (var i=0; i < Bullets.length; i++){
     next=0
     RoundTime=millis();
     faze=faze+1
-    if(faze%2===0){
+    if(faze%4===0){
     RoundType=ceil(random(0,3))
     if(RoundType===1){
     for (var i = 0; i <(random((5+sqrt(Score)/2)/2,5+sqrt(Score)/2)); i++){
@@ -1323,64 +1517,20 @@ for (var i=0; i < Bullets.length; i++){
       Enemys.push(new main(random(0,490),490,5,0,0,1,0,1,millis(),3000));
       }
       }
-      /*
-       else if(Types<0.5 && Types>0.4375){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),5,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      if (ceil(b)===1){ 
+      else if(Types<0.5 && Types>0.4375){ 
       Enemys.push(new main(490, random(0,490),5,0,0,ceil(random(0,3)),0,2,millis(),3000));
       }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,5,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,5,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      }
       else if(Types<0.4375 && Types>0.375){
-     if (ceil(b)===0){ 
       Enemys.push(new main(0, random(0,490),5,0,0,ceil(random(0,3)),0,3,millis(),3000));
       }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),5,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,5,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,5,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      }
       else if(Types<0.375 && Types>0.3125){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
+      Enemys.push(new main(random(0,490),0,5,0,0,ceil(random(0,3)),0,4,millis(),3000));
       }
        else if(Types<0.3125 && Types>0.25){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
+      Enemys.push(new main(random(0,490),490,5,0,0,ceil(random(0,3)),0,5,millis(),3000));
       }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      }
-      */
+
+
       else{
       if (ceil(b)===0){ 
       Enemys.push(new main(0, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
@@ -1421,64 +1571,18 @@ for (var i=0; i < Bullets.length; i++){
       Enemys.push(new main(random(0,490),490,5,0,0,1,0,1,millis(),3000));
       }
       }
-      /*
        else if(Types<0.5 && Types>0.4375){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      if (ceil(b)===1){ 
       Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,2,millis(),3000));
       }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,2,millis(),3000));
-      }
-      }
       else if(Types<0.4375 && Types>0.375){
-     if (ceil(b)===0){ 
       Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,3,millis(),3000));
       }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,3,millis(),3000));
-      }
-      }
       else if(Types<0.375 && Types>0.3125){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      if (ceil(b)===2){ 
       Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
       }
-      if (ceil(b)===3){ 
-      Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,4,millis(),3000));
-      }
-      }
        else if(Types<0.3125 && Types>0.25){
-     if (ceil(b)===0){ 
-      Enemys.push(new main(0, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      if (ceil(b)===1){ 
-      Enemys.push(new main(490, random(0,490),3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      if (ceil(b)===2){ 
-      Enemys.push(new main(random(0,490),0,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
-      }
-      if (ceil(b)===3){ 
       Enemys.push(new main(random(0,490),490,3,0,0,ceil(random(0,3)),0,5,millis(),3000));
       }
-      }
-      */
       else{
       if (ceil(b)===0){ 
       Enemys.push(new main(0, random(0,500),5,0,0,ceil(random(0,3)),0,0,0,3000));
@@ -1497,19 +1601,35 @@ for (var i=0; i < Bullets.length; i++){
       }
       
       fill(0,0,0)
+      textSize(10);
       text("Score:"+Score,10,10);
       text("Time:"+(((millis()-Round)/100)/10)+"s",400,10);
-      text(Equiped,200,10);
-      text(next,100,10);
+      if(Equiped===0){
+      textSize(50);
+      text("handgun",150,50);
+      }
+      else if(Equiped===1){
+      textSize(50);
+      text("RPG",150,50);
+      }
+      else if(Equiped===2){
+      textSize(50);
+      text("Sniper",150,50);
+      }
+      else if(Equiped===3){
+      textSize(50);
+      text("Shotgun",150,50);
+      }
 };
 };
-Start();
-     }};
+Secret();
+     }
+     };
 
     // Get the canvas that Processing-js will use
     var canvas = document.getElementById("mycanvas"); 
     // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
     var processingInstance = new Processing(canvas, sketchProc); 
  </script>
-
+ </div>
 </html>
