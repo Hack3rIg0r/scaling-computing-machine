@@ -181,17 +181,33 @@ var keyD = false;
 
 
 main.prototype.ASDW= function() {
-if(keyD == true){
+if(keyD == true && keyW == false && keyS == false){
 this.x=this.x+this.v*speed;
 }
-if(keyS == true){
+if(keyS == true && keyA == false && keyD == false){
 this.y=this.y+this.v*speed;
 }
-if(keyA == true){
+if(keyA == true && keyW == false && keyS == false){
 this.x=this.x-this.v*speed;
 }
-if(keyW == true){
+if(keyW == true && keyA == false && keyD == false){
 this.y=this.y-this.v*speed;
+}
+if(keyS == true && keyA == true && keyD == false){
+this.y=this.y+this.v*0.70710678118*speed;
+this.x=this.x-this.v*0.70710678118*speed;
+}
+if(keyW == true && keyA == true && keyD == false){
+this.y=this.y-this.v*0.70710678118*speed;
+this.x=this.x-this.v*0.70710678118*speed;
+}
+if(keyS == true && keyA == false && keyD == true){
+this.y=this.y+this.v*0.70710678118*speed;
+this.x=this.x+this.v*0.70710678118*speed;
+}
+if(keyW == true && keyA == false && keyD == true){
+this.y=this.y-this.v*0.70710678118*speed;
+this.x=this.x+this.v*0.70710678118*speed;
 }
   };
 
@@ -859,6 +875,8 @@ draw = function(){
     if(15000-(millis()-TeleTime)>0){
     fill(252,0,0);
     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/15000);
+     fill(0,0,0);
+    text("freeze",200,450);
     }
     else{
      fill(0,0,252);
@@ -894,6 +912,8 @@ draw = function(){
      fill(0,0,252);
      if(AbilityTime+10000>millis()){
      arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(1-(millis()-AbilityTime)/10000)));
+      fill(0,0,0);
+    text("3x",200,450);
     }
     else{
      fill(0,0,252);
