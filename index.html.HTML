@@ -907,6 +907,8 @@ draw = function(){
     if(20000-(millis()-TeleTime)>0){
     fill(252,0,0);
     arc(250,450,50,50,Math.PI/-2,Math.PI/-2+(2*Math.PI*(millis()-TeleTime))/20000);
+        fill(0,0,0);
+    text("3x",230,450);
     }
     else{
      fill(0,0,252);
